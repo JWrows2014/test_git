@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
@@ -68,16 +67,15 @@ def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 def build_plot(df: pd.DataFrame, output_path: Path) -> None:
     dose_order = sorted(df["Dose"].astype(str).unique(), key=lambda value: float(value))
+    plot_df = df.assign(Dose=df["Dose"].astype(str))
 
     sns.set_theme(style="whitegrid")
-    fig, ax = plt.subplots(figsize=(8, 5))
-    sns.boxplot(
-        data=df,
-        x=df["Dose"].astype(str),
+    ax = sns.boxplot(
+        data=plot_df,
+        x="Dose",
         y="ToothLength",
         hue="Supplement",
         order=dose_order,
-        ax=ax,
     )
 
     ax.set_xlabel("Dosage")
@@ -85,9 +83,9 @@ def build_plot(df: pd.DataFrame, output_path: Path) -> None:
     ax.set_title("Tooth Length Distribution by Dosage and Supplement Type")
     ax.legend(title="Supplement Type")
 
-    fig.tight_layout()
-    fig.savefig(output_path, dpi=300)
-    plt.close(fig)
+    ax.figure.tight_layout()
+    ax.figure.savefig(output_path, dpi=300)
+    ax.figure.clf()
 
 
 def main() -> None:
