@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-"""Generate a Tooth Growth boxplot from the local CSV file."""
-
 import pandas as pd
 import seaborn as sns
 
